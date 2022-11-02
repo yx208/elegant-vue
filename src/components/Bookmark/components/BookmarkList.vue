@@ -83,9 +83,9 @@ export default defineComponent({
     transition: color .2s;
 }
 
-.bookmark-item:hover {color: #1461d5; }
-.bookmark-item svg > path { transition: fill .2s; }
-.bookmark-item:hover svg > path {
+.bookmark-item-inner:hover {color: #1461d5; }
+.bookmark-item-inner svg > path { transition: fill .2s; }
+.bookmark-item-inner:hover svg > path {
     fill: #1461d5;
     transition: .2s;
 }

@@ -37,10 +37,12 @@ document.onvisibilitychange = () => {
 .clock {
     text-align: center;
     user-select: none;
-    font-size: 162px;
     color: #fff;
     text-shadow: rgba(0, 0, 0, .4) 2px 0 32px;
-    font-family: Monaco, monospace, Consolas;
+    font-size: 200px;
+    /*font-family: Monaco, monospace, Consolas;*/
+    font-family: "AllertaStencil-Regular", serif;
+    line-height: 1;
 }
 
 </style>
