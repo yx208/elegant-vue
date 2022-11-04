@@ -1,31 +1,48 @@
 <script setup>
 
 import BookmarkList from './components/BookmarkList.vue';
-import bookmarks from './bookmark.json';
+import BookmarkDropdown from './components/BookmarkDropdown.vue';
+import {nextTick, ref} from "vue";
 
-const list = bookmarks.children;
+const bookmarkRef = ref(null);
+const submenuList = ref({ children: [] });
+const submenuVisible = ref(false);
+const submenuLeft = ref('0');
+const onDropMenu = (record, posX) => {
+    if (record.id !== submenuList.value?.id || !submenuVisible.value) {
+        submenuList.value = record;
+        submenuLeft.value = posX - 16 + 'px';
+        nextTick(() => submenuVisible.value = true);
+    }
+};
 
-const onDropMenu = (record) => {
-    console.log(record);
+document.onclick = (event) => {
+    if (!bookmarkRef.value.contains(event.target)) {
+        submenuVisible.value = false;
+    }
 }
 
 </script>
 <template>
-    <div class="bookmark-container">
-        <bookmark-list :list="list" @menu="onDropMenu"></bookmark-list>
-    </div>
+    <section class="bookmark-container" ref="bookmarkRef">
+        <bookmark-list @menu="onDropMenu"></bookmark-list>
+        <div class="bookmark-dropdown" :style="{left:submenuLeft}" v-show="submenuVisible">
+            <bookmark-dropdown
+                column
+                :list="submenuList.children"
+                @menu="onDropMenu"
+            ></bookmark-dropdown>
+        </div>
+    </section>
 </template>
 <style scoped>
 
 .bookmark-container {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
-    background-color: var(--blur-bg);
-    backdrop-filter: blur(var(--blur));
-    height: 32px;
-    padding: 0 16px;
+    height: var(--bookmark-height);
     z-index: 9;
 }
 
@@ -33,9 +50,10 @@ const onDropMenu = (record) => {
     position: absolute;
     top: 32px;
     left: 0;
-    width: 200px;
-    height: 200px;
-    background: #000;
+    min-width: 200px;
+    height: auto;
+    overflow: hidden;
+    clip-path: polygon(26px 0, 41px 15px, 100% 15px, 100% 100%, 0 100%, 0 15px, 11px 15px);
 }
 
 </style>

@@ -44,7 +44,6 @@ const onKeydown = (event) => {
 }
 
 .search::placeholder {
-    color: #d1d5db;
 }
 
 

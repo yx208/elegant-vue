@@ -3,15 +3,18 @@
     --blur: 24px;
     --font-color: #111;
     --body-bg: #fff;
-    --blur-bg: rgba(255, 255, 255, .06);
+    --blur-bg: rgba(255, 255, 255, .4);
+    --bookmark-size: 16px;
+    --bookmark-height: 40px;
+    --bookmark-item: 28px;
+    --primary-color: #1461d5;
 }
 
 @media (prefers-color-scheme: dark) {
     :root {
-        --blur: 24px;
         --font-color: #111;
         --body-bg: #000;
-        --blur-bg: rgba(255, 255, 255, .06);
+        --blur-bg: rgba(255, 255, 255, .4);
     }
 }
 

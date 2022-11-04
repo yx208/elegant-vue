@@ -15,8 +15,8 @@ startTimer();
 
 function getCurrentTime() {
     const date = new Date(),
-        h    = String(date.getHours()).padStart(2, '0'),
-        m    = String(date.getMinutes()).padStart(2, '0');
+          h    = String(date.getHours()).padStart(2, '0'),
+          m    = String(date.getMinutes()).padStart(2, '0');
     return `${h}:${m}`;
 }
 
@@ -37,11 +37,11 @@ document.onvisibilitychange = () => {
 .clock {
     text-align: center;
     user-select: none;
-    color: #fff;
+    color: #f6f6f6;
     text-shadow: rgba(0, 0, 0, .4) 2px 0 32px;
     font-size: 200px;
-    /*font-family: Monaco, monospace, Consolas;*/
     font-family: "AllertaStencil-Regular", serif;
+    letter-spacing: 32px;
     line-height: 1;
 }
 
