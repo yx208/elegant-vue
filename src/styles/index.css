@@ -3,7 +3,7 @@
     --blur: 24px;
     --font-color: #111;
     --body-bg: #fff;
-    --blur-bg: rgba(255, 255, 255, .4);
+    --blur-bg: rgba(255, 255, 255, .3);
     --bookmark-size: 16px;
     --bookmark-height: 40px;
     --bookmark-item: 28px;
@@ -14,15 +14,8 @@
     :root {
         --font-color: #111;
         --body-bg: #000;
-        --blur-bg: rgba(255, 255, 255, .4);
+        --blur-bg: rgba(255, 255, 255, .3);
     }
-}
-
-@font-face {
-    font-family: "AllertaStencil-Regular";
-    src: url("../assets/AllertaStencil-Regular.ttf") format("truetype");
-    font-weight: normal;
-    font-style: normal;
 }
 
 * {

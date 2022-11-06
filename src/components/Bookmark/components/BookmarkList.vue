@@ -66,7 +66,7 @@ onMounted(() => {
     backdrop-filter: blur(var(--blur));
     background-size: 150% 150%;
     overflow: hidden;
-    visibility: hidden;
+    /*visibility: hidden;*/
 }
 
 .bookmark-item {
