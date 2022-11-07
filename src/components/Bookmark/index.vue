@@ -51,6 +51,7 @@ document.addEventListener('click', (event) => {
     height: auto;
     overflow: hidden;
     clip-path: polygon(26px 0, 41px 15px, 100% 15px, 100% 100%, 0 100%, 0 15px, 11px 15px);
+    border-radius: 12px;
 }
 
 </style>

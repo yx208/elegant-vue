@@ -1,7 +1,7 @@
 
 export async function getBookmark() {
     if (chrome.bookmarks) {
-        return chrome.bookmarks.getTree();
+        return (await chrome.bookmarks.getTree())[0].children[0];
     } else {
         return (await import('./bookmark.json')).default;
     }
