@@ -1,50 +1,41 @@
 <script setup>
 
-import {onMounted, ref} from "vue";
-
-import DirSvg from '../../../assets/dir.svg';
-import FileSvg from '../../../assets/file.svg';
-import bookmarks from "../bookmark.json";
+import DirSvg from '@/assets/dir.svg';
+import FileSvg from '@/assets/file.svg';
 
 const emits = defineEmits(['menu']);
 
-const list = ref(bookmarks);
+defineProps({
+    list: {
+        type: Array,
+        default() {
+            return [];
+        }
+    },
+    column: {
+        type: Boolean,
+        default: false
+    }
+});
 
 /**
  * @param {MouseEvent} event
  * @param record
+ * @param index
  */
-const onClickItem = (event, record) => {
-
-    let posX = event.currentTarget.posX;
-    if (!posX) {
-        posX = event.currentTarget.offsetLeft;
-        event.currentTarget.posX = posX;
-    }
-
+const onClickItem = (event, record, index) => {
     if (record.url) {
         window.open(record.url, (event.metaKey || event.ctrlKey) ? 'target' : '_self');
     } else {
-        emits('menu', record, posX);
+        emits('menu', record, index);
     }
 };
 
-const bookmarkRef = ref(null);
-// 挂载后计算偏移
-onMounted(() => {
-    const children = bookmarkRef.value.children;
-    let pre = 0;
-    for (let i = 0; i < children.length - 1; i++) {
-        children[i].posX = pre - children[i].offsetLeft;
-        pre = children[i].posX;
-    }
-});
-
 </script>
 <template>
-    <ul class="bookmark" ref="bookmarkRef">
-        <template v-for="item in list.children" :key="item.id">
-            <li class="bookmark-item" @click="onClickItem($event, item)">
+    <ul class="bookmark" :class="{ 'bookmark-column': column }">
+        <template v-for="(item, index) in list" :key="item.id">
+            <li class="bookmark-item" @click="onClickItem($event, item, index)">
                 <div class="bookmark-item-inner">
                     <img width="20" height="20" :src="item.children ? DirSvg : FileSvg" alt="">
                     <span class="bookmark-title">{{ item.title }}</span>
@@ -66,7 +57,15 @@ onMounted(() => {
     backdrop-filter: blur(var(--blur));
     background-size: 150% 150%;
     overflow: hidden;
-    /*visibility: hidden;*/
+}
+
+.bookmark-column {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    height: 100%;
+    list-style: none;
+    padding: 31px 16px 16px 16px;
 }
 
 .bookmark-item {

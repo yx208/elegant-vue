@@ -5,10 +5,10 @@ import FileSvg from '../../../assets/file.svg';
 
 const emits = defineEmits(['menu']);
 defineProps({
-    list: {
-        type: Array,
+    bookmark: {
+        type: Object,
         default() {
-            return [];
+            return { children: [], parentId: '1' };
         }
     }
 });
@@ -18,24 +18,23 @@ defineProps({
  * @param record
  */
 const onClickItem = (event, record) => {
-
-    let posX = event.currentTarget.posX;
-    if (!posX) {
-        posX = event.currentTarget.offsetLeft;
-        event.currentTarget.posX = posX;
-    }
-
     if (record.url) {
         window.open(record.url, (event.metaKey || event.ctrlKey) ? 'target' : '_self');
     } else {
-        emits('menu', record, posX);
+        emits('menu', record);
     }
 };
 
 </script>
 <template>
     <ul class="bookmark">
-        <template v-for="item in list" :key="item.id">
+        <li class="bookmark-item" v-show="bookmark.parentId !== '1'">
+            <div class="bookmark-item-inner">
+                <img width="20" height="20" :src="DirSvg" alt="">
+                <span class="bookmark-title">返回上一级</span>
+            </div>
+        </li>
+        <template v-for="item in bookmark.children" :key="item.id">
             <li class="bookmark-item" @click="onClickItem($event, item)">
                 <div class="bookmark-item-inner">
                     <img width="20" height="20" :src="item.children ? DirSvg : FileSvg" alt="">

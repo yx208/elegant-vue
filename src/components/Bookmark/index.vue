@@ -1,37 +1,34 @@
 <script setup>
 
+import {nextTick, ref, shallowRef} from "vue";
+import BookmarkBar from './components/BookmarkBar.vue';
 import BookmarkList from './components/BookmarkList.vue';
-import BookmarkDropdown from './components/BookmarkDropdown.vue';
-import {nextTick, ref} from "vue";
 
-const bookmarkRef = ref(null);
-const submenuList = ref({ children: [] });
+const bookmarkRef    = shallowRef(null);
+const submenuData    = shallowRef({ children: [] });
 const submenuVisible = ref(false);
-const submenuLeft = ref('0');
-const onDropMenu = (record, posX) => {
-    if (record.id !== submenuList.value?.id || !submenuVisible.value) {
-        submenuList.value = record;
-        submenuLeft.value = posX - 16 + 'px';
+const submenuLeft    = ref('0');
+
+const onDropMenu = (record, index, posX) => {
+    if (record.id !== submenuData.value?.id || !submenuVisible.value) {
+        submenuData.value = record;
+        posX && (submenuLeft.value = posX - 16 + 'px');
         nextTick(() => submenuVisible.value = true);
     }
 };
 
-document.onclick = (event) => {
+document.addEventListener('click', (event) => {
     if (!bookmarkRef.value.contains(event.target)) {
         submenuVisible.value = false;
     }
-}
+}, { capture: true, passive: true });
 
 </script>
 <template>
     <section class="bookmark-container" ref="bookmarkRef">
-        <bookmark-list @menu="onDropMenu"></bookmark-list>
+        <bookmark-bar @menu="onDropMenu"></bookmark-bar>
         <div class="bookmark-dropdown" :style="{left:submenuLeft}" v-show="submenuVisible">
-            <bookmark-dropdown
-                column
-                :list="submenuList.children"
-                @menu="onDropMenu"
-            ></bookmark-dropdown>
+            <bookmark-list column :list="submenuData.children" @menu="onDropMenu"></bookmark-list>
         </div>
     </section>
 </template>
@@ -48,7 +45,7 @@ document.onclick = (event) => {
 
 .bookmark-dropdown {
     position: absolute;
-    top: 32px;
+    top: var(--bookmark-height);
     left: 0;
     min-width: 200px;
     height: auto;

@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import fs from 'fs';
+import path from 'path';
 
 function insertManifest() {
   return {
@@ -18,5 +19,10 @@ export default defineConfig({
   build: {
     sourcemap: false,
   },
-  plugins: [vue(), insertManifest()]
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, 'src')
+    }
+  },
+  plugins: [vue(), insertManifest()],
 });
