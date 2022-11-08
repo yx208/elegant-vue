@@ -21,7 +21,7 @@ function calculateLayout(elementId, hideClass) {
 
 let lastWinWidth = 9999; // 假设一个非常大的分辨率
 function onResizeLayout() {
-    const currWinWidth = document.body.clientWidth;
+    const currWinWidth = document.body.clientWidth - 40; // 减 40px more 图标
     const isExpand = currWinWidth > lastWinWidth;
     lastWinWidth   = currWinWidth;
     isExpand ? expandBookmarks(currWinWidth) : decreaseBookmarks(currWinWidth);

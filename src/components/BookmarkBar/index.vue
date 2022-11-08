@@ -30,9 +30,9 @@ const onClickMenu = (record, index) => {
     emits('menu', record, index, elementLayout[index].x);
 };
 
-const dropdownRef = ref(null);
-const visibleMore = ref(false);
-const showMoreDot = ref(false);
+const bookmarkBarRef = ref(null);
+const visibleMore    = ref(false);
+const showMoreDot    = ref(false);
 watch(invisibleBookmark.children, (invisibleList) => {
     if (invisibleList.length > 0) {
         showMoreDot.value = true;
@@ -42,19 +42,13 @@ watch(invisibleBookmark.children, (invisibleList) => {
     }
 }, { immediate: true });
 
-document.addEventListener('click', (event) => {
-    if (!dropdownRef.value.contains(event.target)) {
-        console.log(434451);
+document.addEventListener('click', event => {
+    if (visibleMore.value && !bookmarkBarRef.value.contains(event.target)) {
         visibleMore.value = false;
     }
-}, { capture: true, passive: true });
+}, { passive: true });
 
 window.onresize = debounce(onResizeLayout);
-
-const nmb = () => {
-    console.log(visibleMore.value);
-    visibleMore.value = !visibleMore.value;
-}
 
 </script>
 <template>
@@ -67,12 +61,12 @@ const nmb = () => {
             @menu="onClickMenu"
         ></bookmark-list>
         <span class="bookmark-more" v-show="showMoreDot">
-            <span class="more-icon" @click="nmb">
+            <span class="more-icon" @click.stop="visibleMore = !visibleMore">
                 <more-icon></more-icon>
             </span>
         </span>
     </div>
-    <div class="bg-blur bookmark-dropdown" ref="dropdownRef" v-show="visibleMore">
+    <div class="bg-blur bookmark-dropdown" ref="bookmarkBarRef" v-show="visibleMore">
         <bookmark-list column short :list="invisibleBookmark.children"></bookmark-list>
     </div>
 </template>
