@@ -28,7 +28,7 @@ const onDropMenu = (record, index, posX) => {
         menuStackPoint.value = 0;
     }
 
-    posX && (offsetLeft.value = posX - 16 + 'px');
+    posX && (offsetLeft.value = posX + 'px');
     nextTick(() => submenuVisible.value = true);
 };
 
@@ -79,7 +79,8 @@ document.addEventListener('click', (event) => {
     min-width: 200px;
     height: auto;
     overflow: hidden;
-    clip-path: polygon(26px 0, 41px 15px, 100% 15px, 100% 100%, 0 100%, 0 15px, 11px 15px);
+    clip-path: path("M 20 17 C 7 17 4 2 0 0 V 1000 H 500 V 17 H 0 Z");
+    /*clip-path: polygon(26px 0, 41px 15px, 100% 15px, 100% 100%, 0 100%, 0 15px, 11px 15px);*/
 }
 
 </style>
