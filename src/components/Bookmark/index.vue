@@ -1,34 +1,63 @@
 <script setup>
 
-import {nextTick, ref, shallowRef} from "vue";
-import BookmarkBar from './components/BookmarkBar.vue';
-import BookmarkList from './components/BookmarkList.vue';
+import {computed, nextTick, reactive, ref} from "vue";
+import BookmarkBar from '@/components/BookmarkBar/index.vue';
+import BookmarkList, { BookmarkItem } from '@/components/BookmarkList';
+import FolderIcon from '@/components/IconPack/Dir.vue';
 
-const bookmarkRef    = shallowRef(null);
-const submenuData    = shallowRef({ children: [] });
+const elementRef     = ref(null);
+const menuStack      = reactive([{ children: [], id: null }]);
+const menuStackPoint = ref(0);
 const submenuVisible = ref(false);
-const submenuLeft    = ref('0');
+const offsetLeft     = ref('0');
+const visibleMenu    = computed(() => menuStack[menuStackPoint.value]);
 
 const onDropMenu = (record, index, posX) => {
-    if (record.id !== submenuData.value?.id || !submenuVisible.value) {
-        submenuData.value = record;
-        posX && (submenuLeft.value = posX - 16 + 'px');
-        nextTick(() => submenuVisible.value = true);
+
+    const menu = menuStack[menuStackPoint.value];
+    // 点击自身
+    if (menu?.id === record.id && submenuVisible.value) {
+        submenuVisible.value = false;
+        return;
     }
+
+    if (menu?.id === record.parentId) {
+        menuStack[++menuStackPoint.value] = record;
+    } else {
+        menuStack[0] = record;
+        menuStackPoint.value = 0;
+    }
+
+    posX && (offsetLeft.value = posX - 16 + 'px');
+    nextTick(() => submenuVisible.value = true);
 };
 
+const onBackUp = () => {
+    menuStack.pop();
+    menuStackPoint.value--;
+}
+
 document.addEventListener('click', (event) => {
-    if (!bookmarkRef.value.contains(event.target)) {
+    if (!elementRef.value.contains(event.target)) {
         submenuVisible.value = false;
     }
 }, { capture: true, passive: true });
 
 </script>
 <template>
-    <section class="bookmark-container" ref="bookmarkRef">
+    <section class="bookmark-container" ref="elementRef">
         <bookmark-bar @menu="onDropMenu"></bookmark-bar>
-        <div class="bookmark-dropdown" :style="{left:submenuLeft}" v-show="submenuVisible">
-            <bookmark-list column :list="submenuData.children" @menu="onDropMenu"></bookmark-list>
+        <div class="bg-blur bookmark-dropdown" :style="{left:offsetLeft}" v-show="submenuVisible">
+            <bookmark-list column :list="visibleMenu.children" @menu="onDropMenu">
+                <template #header>
+                    <bookmark-item
+                        v-show="menuStackPoint > 0"
+                        :icon="FolderIcon"
+                        title="返回上一级"
+                        @click.native="onBackUp"
+                    ></bookmark-item>
+                </template>
+            </bookmark-list>
         </div>
     </section>
 </template>
@@ -51,7 +80,6 @@ document.addEventListener('click', (event) => {
     height: auto;
     overflow: hidden;
     clip-path: polygon(26px 0, 41px 15px, 100% 15px, 100% 100%, 0 100%, 0 15px, 11px 15px);
-    border-radius: 12px;
 }
 
 </style>

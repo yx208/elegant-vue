@@ -7,7 +7,7 @@ import Bookmark from './components/Bookmark/index.vue';
 </script>
 
 <template>
+    <bookmark></bookmark>
     <clock style="margin-bottom:48px"></clock>
     <search-input></search-input>
-    <bookmark></bookmark>
 </template>

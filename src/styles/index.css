@@ -4,9 +4,9 @@
     --font-color: #111;
     --body-bg: #fff;
     --blur-bg: rgba(255, 255, 255, .3);
-    --bookmark-size: 16px;
-    --bookmark-height: 40px;
-    --bookmark-item: 28px;
+    --bookmark-size: 14px;
+    --bookmark-height: 32px;
+    --bookmark-item: 24px;
     --primary-color: #1461d5;
 }
 
@@ -49,6 +49,12 @@ body {
 
 @keyframes enter-app {
     to { opacity: 1; }
+}
+
+.bg-blur {
+    background-color: var(--blur-bg);
+    backdrop-filter: blur(var(--blur));
+    background-size: 150% 150%;
 }
 
 
