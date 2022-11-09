@@ -3,7 +3,7 @@
     --blur: 24px;
     --font-color: #111;
     --body-bg: #fff;
-    --blur-bg: rgba(255, 255, 255, .3);
+    --blur-bg: rgba(255, 255, 255, .34);
     --bookmark-size: 14px;
     --bookmark-height: 32px;
     --bookmark-item: 24px;
@@ -14,7 +14,7 @@
     :root {
         --font-color: #111;
         --body-bg: #000;
-        --blur-bg: rgba(255, 255, 255, .3);
+        --blur-bg: rgba(255, 255, 255, .34);
     }
 }
 
@@ -37,14 +37,12 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-
     user-select: none;
-    background-color: #fff;
-    background-image: url('../assets/bg.jpg');
     background-repeat: no-repeat;
     background-size: cover;
     opacity: 0;
-    animation: enter-app .3s forwards ease;
+    animation: enter-app .6s forwards ease;
+    /*box-shadow: 0 -20px 30px 20px rgba(0, 0, 0, .1) inset;*/
 }
 
 @keyframes enter-app {

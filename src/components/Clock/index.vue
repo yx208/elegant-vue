@@ -40,7 +40,7 @@ document.onvisibilitychange = () => {
     color: #f6f6f6;
     text-shadow: rgba(0, 0, 0, .4) 2px 0 32px;
     font-size: 180px;
-    letter-spacing: 24px;
+    letter-spacing: 16px;
     line-height: 1;
     font-family: Monaco, monospace, Consolas;
 }
