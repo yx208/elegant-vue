@@ -1,15 +1,13 @@
 import file from '@/assets/file.png';
 
-const isDev = process.env.NODE_ENV === 'development';
-
 export async function getBookmark() {
-    return (await chrome.bookmarks.getTree())[0].children[0];
-    // return (await import('./bookmark.json')).default;
+    // return (await chrome.bookmarks.getTree())[0].children[0];
+    return (await import('./bookmark.json')).default;
 }
 
 export function getFaviconUrl(url) {
-    return `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(url)}&size=20`;
-    // return file;
+    // return `chrome-extension://${chrome.runtime.id}/_favicon/?pageUrl=${encodeURIComponent(url)}&size=20`;
+    return file;
 }
 
 export function debounce(fn) {

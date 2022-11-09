@@ -11,6 +11,11 @@ initBackground().then(res => {
     bg.style.cssText = `background-image:url(${res});opacity:1;`;
 });
 
+const onCleanBg = () => {
+    const bg = document.getElementById('bg');
+    bg.style.backgroundImage = 'url(bg.jpg)';
+}
+
 </script>
 
 <template>
@@ -18,7 +23,7 @@ initBackground().then(res => {
     <bookmark></bookmark>
     <clock style="margin-bottom:48px"></clock>
     <search-input></search-input>
-    <tool-bar></tool-bar>
+    <tool-bar @clean="onCleanBg"></tool-bar>
 </template>
 <style>
 

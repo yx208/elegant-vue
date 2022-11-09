@@ -1,8 +1,12 @@
 <script setup>
 
 import PictureIcon from '@/components/IconPack/Picture.vue';
+import CleanIcon from '@/components/IconPack/Clean.vue';
+
 import {ref} from "vue";
 import {fileToBase64} from "@/utils/util.js";
+
+const emits = defineEmits(['clean']);
 
 const fileRef = ref();
 const onSelectedFile = (event) => {
@@ -13,10 +17,16 @@ const onSelectedFile = (event) => {
     });
 }
 
+const cleanBg = () => {
+    chrome.storage?.local.remove('background');
+    emits('clean');
+}
+
 </script>
 <template>
     <div class="tool-bar">
         <picture-icon @click.native="fileRef.click()"></picture-icon>
+        <clean-icon @click.native="cleanBg"></clean-icon>
         <input
             @change="onSelectedFile"
             class="file-input"
@@ -34,7 +44,7 @@ const onSelectedFile = (event) => {
     right: 0;
     bottom: 0;
     display: flex;
-    justify-content: space-between;
+    gap: 24px;
     padding: 24px;
 }
 
