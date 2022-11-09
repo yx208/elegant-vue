@@ -3,38 +3,56 @@
 import {computed, nextTick, reactive, ref} from "vue";
 import BookmarkBar from '@/components/BookmarkBar/index.vue';
 import BookmarkList, { BookmarkItem } from '@/components/BookmarkList';
-import FolderIcon from '@/components/IconPack/Dir.vue';
+import BackIcon from '@/components/IconPack/Back.vue';
 
-const elementRef     = ref(null);
-const menuStack      = reactive([{ children: [], id: null }]);
-const menuStackPoint = ref(0);
-const submenuVisible = ref(false);
-const offsetLeft     = ref('0');
-const visibleMenu    = computed(() => menuStack[menuStackPoint.value]);
+const elementRef        = ref(null);
+const menuStack         = reactive([{ children: [], id: null }]);
+const menuStackPointer  = ref(0);
+const submenuVisible    = ref(false);
+const menuStyle         = ref(null);
+const visibleMenu       = computed(() => menuStack[menuStackPointer.value]);
 
-const onDropMenu = (record, index, posX) => {
+/**
+ * @param record - 需要展示的 bookmark item
+ * @param index - 暂时没啥用
+ * @param meta - 子组件用于约定数据
+ */
+const onDropMenu = (record, index, meta) => {
 
-    const menu = menuStack[menuStackPoint.value];
+    const currentMenu = menuStack[menuStackPointer.value];
+
     // 点击自身
-    if (menu?.id === record.id && submenuVisible.value) {
+    if (currentMenu?.id === record.id && submenuVisible.value) {
         submenuVisible.value = false;
         return;
     }
 
-    if (menu?.id === record.parentId) {
-        menuStack[++menuStackPoint.value] = record;
-    } else {
+    // 第一个套方案，根据父元素判断是否需要压栈
+    // if (currentMenu?.id === record.parentId) {
+    //     menuStack[++menuStackPointer.value] = record;
+    // } else {
+    //     menuStack[0] = record;
+    //     menuStackPointer.value = 0;
+    // }
+
+    // 第二套方案，根据传递进来的值判断是否压栈，如果存在 meta 那就是从 bookmark-bar 触发的，因为需要调整展示位置
+    if (meta) {
         menuStack[0] = record;
-        menuStackPoint.value = 0;
+        menuStackPointer.value = 0;
+    } else {
+        menuStack[++menuStackPointer.value] = record;
     }
 
-    posX && (offsetLeft.value = posX + 'px');
+    if (meta) {
+        menuStyle.value = { [meta.dir]: meta.x + 'px' };
+    }
+
     nextTick(() => submenuVisible.value = true);
 };
 
 const onBackUp = () => {
     menuStack.pop();
-    menuStackPoint.value--;
+    menuStackPointer.value--;
 }
 
 document.addEventListener('click', (event) => {
@@ -47,15 +65,16 @@ document.addEventListener('click', (event) => {
 <template>
     <section class="bookmark-container" ref="elementRef">
         <bookmark-bar @menu="onDropMenu"></bookmark-bar>
-        <div class="bg-blur bookmark-dropdown" :style="{left:offsetLeft}" v-show="submenuVisible">
+        <div class="bg-blur bookmark-dropdown" :style="menuStyle" v-show="submenuVisible">
             <bookmark-list column :list="visibleMenu.children" @menu="onDropMenu">
                 <template #header>
                     <bookmark-item
-                        v-show="menuStackPoint > 0"
-                        :icon="FolderIcon"
+                        v-show="menuStackPointer > 0"
                         title="返回上一级"
                         @click.native="onBackUp"
-                    ></bookmark-item>
+                    >
+                        <template #icon><back-icon></back-icon></template>
+                    </bookmark-item>
                 </template>
             </bookmark-list>
         </div>
@@ -73,13 +92,13 @@ document.addEventListener('click', (event) => {
 }
 
 .bookmark-dropdown {
+    border-top: 2px solid var(--primary-color);
     position: absolute;
-    top: var(--bookmark-height);
-    left: 0;
+    top: calc(var(--bookmark-height) + 12px);
     min-width: 200px;
     height: auto;
     overflow: hidden;
-    clip-path: path("M 20 17 C 7 17 4 2 0 0 V 1000 H 500 V 17 H 0 Z");
+    /*clip-path: path('M 20 17 C 7 17 4 2 0 0 V 1000 H 500 V 17 H 0 Z');*/
     /*clip-path: polygon(26px 0, 41px 15px, 100% 15px, 100% 100%, 0 100%, 0 15px, 11px 15px);*/
 }
 

@@ -21,32 +21,21 @@ getBookmark().then(res => {
     visibleBookmark.children = res.children;
     visibleBookmark.parentId = res.parentId;
     visibleBookmark.title    = res.title;
-    nextTick(() => {
-        calculateLayout('bookmark', 'hidden-bookmark');
-    });
+    nextTick(() => calculateLayout('bookmark', 'hidden-bookmark'));
 });
 
 const onClickMenu = (record, index) => {
-    emits('menu', record, index, elementLayout[index].x);
+    emits('menu', record, null, { dir: 'left', x: elementLayout[index].x });
 };
 
-const bookmarkBarRef = ref(null);
-const visibleMore    = ref(false);
-const showMoreDot    = ref(false);
-watch(invisibleBookmark.children, (invisibleList) => {
-    if (invisibleList.length > 0) {
-        showMoreDot.value = true;
-    } else {
-        showMoreDot.value = false;
-        visibleMore.value = false;
-    }
-}, { immediate: true });
+const onClickMore = () => {
+    emits('menu', invisibleBookmark, null, { dir: 'right', x: 12 });
+}
 
-document.addEventListener('click', event => {
-    if (visibleMore.value && !bookmarkBarRef.value.contains(event.target)) {
-        visibleMore.value = false;
-    }
-}, { passive: true });
+const showMoreDot = ref(false);
+watch(invisibleBookmark.children, (invisibleList) => {
+    showMoreDot.value = invisibleList.length > 0;
+}, { immediate: true });
 
 window.onresize = debounce(onResizeLayout);
 
@@ -61,13 +50,10 @@ window.onresize = debounce(onResizeLayout);
             @menu="onClickMenu"
         ></bookmark-list>
         <span class="bookmark-more" v-show="showMoreDot">
-            <span class="more-icon" @click.stop="visibleMore = !visibleMore">
+            <span class="more-icon" @click="onClickMore">
                 <more-icon></more-icon>
             </span>
         </span>
-    </div>
-    <div class="bg-blur bookmark-dropdown" ref="bookmarkBarRef" v-show="visibleMore">
-        <bookmark-list column short :list="invisibleBookmark.children"></bookmark-list>
     </div>
 </template>
 <style scoped>
@@ -102,12 +88,13 @@ window.onresize = debounce(onResizeLayout);
 
 .bookmark-dropdown {
     position: absolute;
-    top: var(--bookmark-height);
-    right: 0;
+    top: calc(var(--bookmark-height) + 12px);
+    right: 12px;
     min-width: 200px;
     height: auto;
     overflow: hidden;
-    clip-path: polygon(91% 0, 86% 15px, 100% 15px, 100% 100%, 0 100%, 0 15px, 96% 15px);
+    border-top: 2px solid var(--primary-color);
+    /*clip-path: polygon(91% 0, 86% 15px, 100% 15px, 100% 100%, 0 100%, 0 15px, 96% 15px);*/
 }
 
 </style>

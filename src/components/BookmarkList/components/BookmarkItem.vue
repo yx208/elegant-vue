@@ -1,10 +1,6 @@
 <script setup>
 
 defineProps({
-    // a component
-    icon: {
-        required: true
-    },
     title: {
         type: String,
         required: true
@@ -19,7 +15,9 @@ defineProps({
 <template>
     <li v-once class="bookmark-item">
         <div class="bookmark-item-inner">
-            <component :is="icon"></component>
+            <template v-if="$slots.icon">
+                <slot name="icon"></slot>
+            </template>
             <span class="bookmark-title" :class="{ 'bookmark-short': short }">{{ title }}</span>
         </div>
     </li>

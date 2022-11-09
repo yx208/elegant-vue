@@ -1,6 +1,7 @@
 <script setup>
 
 const onKeydown = (event) => {
+    if (event.isComposing) return;
     if (event.key === 'Enter') {
         const content = event.target.value.trim();
         const openMode = (event.metaKey || event.ctrlKey) ? 'target' : '_self';
@@ -16,11 +17,7 @@ const onKeydown = (event) => {
 </script>
 <template>
     <div class="search-wrapper">
-        <input
-            class="search"
-            placeholder="Search for the thing you want"
-            @keydown="onKeydown"
-        >
+        <input class="search" placeholder="Search for the thing you want" @keydown="onKeydown">
     </div>
 </template>
 <style scoped>
@@ -41,10 +38,7 @@ const onKeydown = (event) => {
     font-size: 32px;
     background-color: transparent;
     text-align: center;
+    caret-color: var(--primary-color);
 }
-
-.search::placeholder {
-}
-
 
 </style>
