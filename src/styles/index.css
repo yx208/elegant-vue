@@ -55,4 +55,8 @@ body {
     background-size: 150% 150%;
 }
 
+.cursor-pointer {
+    cursor: pointer;
+}
+
 

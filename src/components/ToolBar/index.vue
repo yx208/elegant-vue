@@ -6,27 +6,28 @@ import CleanIcon from '@/components/IconPack/Clean.vue';
 import {ref} from "vue";
 import {fileToBase64} from "@/utils/util.js";
 
-const emits = defineEmits(['clean']);
-
 const fileRef = ref();
 const onSelectedFile = (event) => {
     const image = event.target.files[0];
     fileToBase64(image).then(res => {
         event.target.value = '';
+        const bg = document.getElementById('bg');
+        bg.style.backgroundImage = `url(${res})`;
         chrome.storage?.local.set({background : res});
     });
 }
 
 const cleanBg = () => {
     chrome.storage?.local.remove('background');
-    emits('clean');
+    const bg = document.getElementById('bg');
+    bg.style.backgroundImage = 'url(bg.jpg)';
 }
 
 </script>
 <template>
     <div class="tool-bar">
-        <picture-icon @click.native="fileRef.click()"></picture-icon>
-        <clean-icon @click.native="cleanBg"></clean-icon>
+        <picture-icon class="cursor-pointer" @click.native="fileRef.click()"></picture-icon>
+        <clean-icon class="cursor-pointer" @click.native="cleanBg"></clean-icon>
         <input
             @change="onSelectedFile"
             class="file-input"
