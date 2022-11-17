@@ -83,7 +83,7 @@ const onClickItem = (event, record, index) => {
     height: 100%;
     list-style: none;
     padding: 16px 16px 16px 16px;
-    max-height: 76vw;
+    max-height: 76vh;
     overflow: auto;
 }
 
