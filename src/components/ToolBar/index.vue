@@ -2,6 +2,7 @@
 
 import PictureIcon from '@/components/IconPack/Picture.vue';
 import CleanIcon from '@/components/IconPack/Clean.vue';
+import config from "@/utils/config.js";
 
 import {ref} from "vue";
 import {fileToBase64} from "@/utils/util.js";
@@ -11,16 +12,18 @@ const onSelectedFile = (event) => {
     const image = event.target.files[0];
     fileToBase64(image).then(res => {
         event.target.value = '';
-        const bg = document.getElementById('bg');
-        bg.style.backgroundImage = `url(${res})`;
-        chrome.storage?.local.set({background : res});
+        document.getElementById('bg').style.backgroundImage = `url(${res})`;
+        chrome.storage?.sync.set({background: res}).then(() => {
+            console.log("Picture saved!");
+        });
     });
 }
 
 const cleanBg = () => {
-    chrome.storage?.local.remove('background');
-    const bg = document.getElementById('bg');
-    bg.style.backgroundImage = 'url(bg.jpg)';
+    chrome.storage?.sync.remove('background').then(() => {
+        console.log('Removed and reset to default picture!');
+    });
+    document.getElementById('bg').style.backgroundImage = `url(${config.bgUrl})`;
 }
 
 </script>

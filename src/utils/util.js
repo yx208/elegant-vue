@@ -1,4 +1,5 @@
 import file from '@/assets/file.png';
+import config from "@/utils/config.js";
 
 export async function getBookmark() {
     return (await chrome.bookmarks.getTree())[0].children[0];
@@ -35,5 +36,5 @@ export function fileToBase64(file) {
 
 export async function initBackground() {
     const res = await chrome.storage?.local.get('background');
-    return res?.background ?? 'bg.jpg';
+    return res?.background ?? config.bgUrl;
 }
