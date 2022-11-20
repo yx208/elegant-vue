@@ -8,22 +8,24 @@ import {ref} from "vue";
 import {fileToBase64} from "@/utils/util.js";
 
 const fileRef = ref();
-const onSelectedFile = (event) => {
+const onSelectedFile = async (event) => {
     const image = event.target.files[0];
-    fileToBase64(image).then(res => {
-        event.target.value = '';
-        document.getElementById('bg').style.backgroundImage = `url(${res})`;
-        chrome.storage?.sync.set({background: res}).then(() => {
-            console.log("Picture saved!");
-        });
-    });
+    const encodeUrl = await fileToBase64(image);
+    document.getElementById('bg').style.backgroundImage = `url(${encodeUrl})`;
+    console.log(chrome.storage)
+    if (chrome.storage) {
+        await chrome.storage.local.set({background: encodeUrl});
+        console.log("Picture saved!");
+    }
+
+    event.target.value = '';
 }
 
 const cleanBg = () => {
-    chrome.storage?.sync.remove('background').then(() => {
+    document.getElementById('bg').style.backgroundImage = `url(${config.bgUrl})`;
+    chrome.storage?.local.remove('background').then(() => {
         console.log('Removed and reset to default picture!');
     });
-    document.getElementById('bg').style.backgroundImage = `url(${config.bgUrl})`;
 }
 
 </script>

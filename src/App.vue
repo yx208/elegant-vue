@@ -7,8 +7,7 @@ import ToolBar from './components/ToolBar/index.vue';
 import {initBackground} from "@/utils/util.js";
 
 initBackground().then(res => {
-    const bg = document.getElementById('bg');
-    bg.style.cssText = `background-image:url(${res});opacity:1;`;
+    document.getElementById('bg').style.cssText = `background-image:url(${res});opacity:1;`;
 });
 
 </script>
